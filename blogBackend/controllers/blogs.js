@@ -15,12 +15,12 @@ blogRouter.get('/:id', async (request, response) => {
 blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   const body = request.body
 
-  if (body.title === undefined) {
+  if (body.title === undefined || body.title === '') {
     return response.status(400).json({
       error: 'Error: the title of the blog is missing',
     })
   }
-  if (body.url === undefined) {
+  if (body.url === undefined || body.url === '') {
     return response.status(400).json({
       error: 'Error: url of the blog is missing',
     })
