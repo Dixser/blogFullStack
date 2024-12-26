@@ -1,30 +1,12 @@
-import { useState } from "react"
-const LoginForm = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+const LoginForm = ({
+  handleLogin,
+  handleUsernameChange,
+  handlePasswordChange,
+  username,
+  password
+ }) => {
+  
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
-
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      })
-
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-
-      setUser(user)
-      setUsername('')
-      setPassword('')
-    } catch (exception) {
-      setErrorMessage('Wrong credentials')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
   return (
     <>
       <form onSubmit={handleLogin}>
@@ -35,7 +17,7 @@ const LoginForm = () => {
             value={username}
             name="Username"
             autoComplete="username"
-            onChange={({ target }) => setUsername(target.value)}
+            onChange={handleUsernameChange}
           />
         </div>
         <div>
@@ -45,7 +27,7 @@ const LoginForm = () => {
             value={password}
             name="Password"
             autoComplete="current-password"
-            onChange={({ target }) => setPassword(target.value)}
+            onChange={handlePasswordChange}
           />
         </div>
         <button type="submit">login</button>

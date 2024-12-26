@@ -1,5 +1,6 @@
-import { useState } from "react"
-const BlogForm = () => {
+import { useState } from 'react'
+import blogService from '../services/blogs'
+const BlogForm = (blogs, handleErrorMessageChange, errorMessage) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -16,28 +17,23 @@ const BlogForm = () => {
       setUrl('')
       blogs.push(newBlog)
       setErrorMessage('Blog added!')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      //handleErrorMessageChange('Blog added!')
     } catch (error) {
       setErrorMessage(error.response.data.error)
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
+      handleErrorMessageChange(error.response.data.error)
     }
   }
-
   return (
     <form onSubmit={handleSubmit}>
-      title:{' '}
+      Title:
       <input type="text" onChange={({ target }) => setTitle(target.value)} />
       <br />
-      author:{' '}
+      Author:
       <input type="text" onChange={({ target }) => setAuthor(target.value)} />
       <br />
-      url: <input type="text" onChange={({ target }) => setUrl(target.value)} />
+      URL: <input type="text" onChange={({ target }) => setUrl(target.value)} />
       <br />
-      <button type="submit">create blog</button>
+      <button type="submit">Create Blog</button>
     </form>
   )
 }
