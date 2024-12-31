@@ -3,33 +3,52 @@ import { useState } from 'react'
 import blogService from '../services/blogs'
 import Blog from './Blog'
 import Togglable from './Toggable'
+
+/* const BlogForm = (blogs, handleSubmit, errorMessage) => {
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  console.log("BlogForm",handleSubmit);
+  return (
+    <form onSubmit={handleSubmit}>
+      Title:
+      <input
+        type="text"
+        value={title}
+        onChange={({ target }) => setTitle(target.value)}
+      />
+      <br />
+      Author:
+      <input
+        type="text"
+        value={author}
+        onChange={({ target }) => setAuthor(target.value)}
+      />
+      <br />
+      URL:
+      <input
+        type="text"
+        value={url}
+        onChange={({ target }) => setUrl(target.value)}
+      />
+      <br />
+      <button type="submit">Create Blog</button>
+    </form>
+  )
+} */
+
 const BlogSection = ({
   blogs,
   user,
   handleLogout,
   handleSubmit,
   errorMessage,
+  title,
+  author,
+  url,
 }) => {
-  const BlogForm = (blogs, handleSubmit, errorMessage) => {
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
-
-    return (
-      <form onSubmit={handleSubmit}>
-        title:
-        <input type="text" onChange={({ target }) => setTitle(target.value)} />
-        <br />
-        author:
-        <input type="text" onChange={({ target }) => setAuthor(target.value)} />
-        <br />
-        url:{' '}
-        <input type="text" onChange={({ target }) => setUrl(target.value)} />
-        <br />
-        <button type="submit">create blog</button>
-      </form>
-    )
-  }
+  console.log('BlogSection', handleSubmit)
   return (
     <>
       <div>
@@ -40,14 +59,37 @@ const BlogSection = ({
             logout
           </button>
         </p>
-        <Togglable buttonLabel={"New Blog"}>
-
-        <BlogForm
-          blogs={blogs}
-          handleSubmit={handleSubmit}
-          errorMessage={errorMessage}
-          />
-          </Togglable>
+        <Togglable buttonLabel={'New Blog'}>
+          <form onSubmit={handleSubmit}>
+            Title:
+            <input
+              type="text"
+              value={title}
+              onChange={({ target }) => setTitle(target.value)}
+            />
+            <br />
+            Author:
+            <input
+              type="text"
+              value={author}
+              onChange={({ target }) => setAuthor(target.value)}
+            />
+            <br />
+            URL:
+            <input
+              type="text"
+              value={url}
+              onChange={({ target }) => setUrl(target.value)}
+            />
+            <br />
+            <button type="submit">Create Blog</button>
+          </form>
+          {/*           <BlogForm
+            blogs={blogs}
+            handleSubmit={handleSubmit}
+            errorMessage={errorMessage}
+          /> */}
+        </Togglable>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}

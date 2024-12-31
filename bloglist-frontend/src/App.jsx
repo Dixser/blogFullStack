@@ -11,6 +11,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -49,6 +53,8 @@ const App = () => {
   }
   const handleSubmit = async (event) => {
     event.preventDefault()
+    console.log(event.target.title)
+
     try {
       const newBlog = await blogService.create({
         title,
@@ -60,7 +66,7 @@ const App = () => {
       setUrl('')
       blogs.push(newBlog)
       handleErrorMessageChange('Blog added!')
-    } catch (error) {      
+    } catch (error) {
       handleErrorMessageChange(error.response.data.error)
     }
   }
@@ -72,6 +78,7 @@ const App = () => {
       setErrorMessage(null)
     }, 5000)
   }
+console.log("function",handleSubmit);
 
   return (
     <>
@@ -91,6 +98,9 @@ const App = () => {
           handleLogout={handleLogout}
           handleSubmit={handleSubmit}
           errorMessage={errorMessage}
+          title={title}
+          author={author}
+          url={url}
         />
       )}
     </>
