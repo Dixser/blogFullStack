@@ -1,54 +1,82 @@
 //import BlogForm from './BlogForm'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import blogService from '../services/blogs'
 import Blog from './Blog'
 import Togglable from './Toggable'
 
-/* const BlogForm = (blogs, handleSubmit, errorMessage) => {
+
+
+const BlogSection = ({
+  blogs,
+  user,
+  handleLogout,
+  errorMessage,
+  handleErrorMessageChange,
+}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const handleTitleChange = ({ target }) => setTitle(target.value)
+  const handleAuthorChange = ({ target }) => setAuthor(target.value)
+  const handleUrlChange = ({ target }) => setUrl(target.value)
 
-  console.log("BlogForm",handleSubmit);
-  return (
-    <form onSubmit={handleSubmit}>
+  const blogFormRef = useRef()
+
+  const BlogForm = (errorMessage) => {
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
+    const handleSubmit = async (event) => {
+      event.preventDefault()  
+      try {
+        const newBlog = await blogService.create({
+          title,
+          author,
+          url,
+        })
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+        blogs.push(newBlog)
+        handleErrorMessageChange('Blog added!')
+      } catch (error) {
+        console.log(error.message);
+        
+        handleErrorMessageChange(error.response.data.error)
+      }
+    }
+    const handleTitleChange = ({ target }) => setTitle(target.value)
+    const handleAuthorChange = ({ target }) => setAuthor(target.value)
+    const handleUrlChange = ({ target }) => setUrl(target.value)
+  
+    return (
+      <form onSubmit={handleSubmit}>
       Title:
       <input
         type="text"
         value={title}
-        onChange={({ target }) => setTitle(target.value)}
+        onChange={handleTitleChange}
       />
       <br />
       Author:
       <input
         type="text"
         value={author}
-        onChange={({ target }) => setAuthor(target.value)}
+        onChange={handleAuthorChange}
       />
       <br />
       URL:
       <input
         type="text"
         value={url}
-        onChange={({ target }) => setUrl(target.value)}
+        onChange={handleUrlChange}
       />
       <br />
       <button type="submit">Create Blog</button>
     </form>
-  )
-} */
+    )
+  }
 
-const BlogSection = ({
-  blogs,
-  user,
-  handleLogout,
-  handleSubmit,
-  errorMessage,
-  title,
-  author,
-  url,
-}) => {
-  console.log('BlogSection', handleSubmit)
   return (
     <>
       <div>
@@ -59,36 +87,24 @@ const BlogSection = ({
             logout
           </button>
         </p>
-        <Togglable buttonLabel={'New Blog'}>
-          <form onSubmit={handleSubmit}>
+        <Togglable buttonLabel={'New Blog'} ref={blogFormRef}>
+{/*                     <form onSubmit={handleSubmit}>
             Title:
-            <input
-              type="text"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
+            <input type="text" value={title} onChange={handleTitleChange} />
             <br />
             Author:
-            <input
-              type="text"
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
-            />
+            <input type="text" value={author} onChange={handleAuthorChange} />
             <br />
             URL:
-            <input
-              type="text"
-              value={url}
-              onChange={({ target }) => setUrl(target.value)}
-            />
+            <input type="text" value={url} onChange={handleUrlChange} />
             <br />
             <button type="submit">Create Blog</button>
-          </form>
-          {/*           <BlogForm
-            blogs={blogs}
-            handleSubmit={handleSubmit}
-            errorMessage={errorMessage}
-          /> */}
+          </form> */}
+          <BlogForm
+/*             blogs={blogs}
+            handleErrorMessageChange={handleErrorMessageChange}
+            errorMessage={errorMessage} */
+          />
         </Togglable>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />

@@ -6,6 +6,8 @@ const BlogForm = (blogs, handleErrorMessageChange, errorMessage) => {
   const [url, setUrl] = useState('')
   const handleSubmit = async (event) => {
     event.preventDefault()
+    console.log(handleErrorMessageChange)
+
     try {
       const newBlog = await blogService.create({
         title,
@@ -16,25 +18,40 @@ const BlogForm = (blogs, handleErrorMessageChange, errorMessage) => {
       setAuthor('')
       setUrl('')
       blogs.push(newBlog)
-      setErrorMessage('Blog added!')
-      //handleErrorMessageChange('Blog added!')
+      handleErrorMessageChange('Blog added!')
     } catch (error) {
-      setErrorMessage(error.response.data.error)
       handleErrorMessageChange(error.response.data.error)
     }
   }
+  const handleTitleChange = ({ target }) => setTitle(target.value)
+  const handleAuthorChange = ({ target }) => setAuthor(target.value)
+  const handleUrlChange = ({ target }) => setUrl(target.value)
+
   return (
     <form onSubmit={handleSubmit}>
-      Title:
-      <input type="text" onChange={({ target }) => setTitle(target.value)} />
-      <br />
-      Author:
-      <input type="text" onChange={({ target }) => setAuthor(target.value)} />
-      <br />
-      URL: <input type="text" onChange={({ target }) => setUrl(target.value)} />
-      <br />
-      <button type="submit">Create Blog</button>
-    </form>
+    Title:
+    <input
+      type="text"
+      value={title}
+      onChange={handleTitleChange}
+    />
+    <br />
+    Author:
+    <input
+      type="text"
+      value={author}
+      onChange={handleAuthorChange}
+    />
+    <br />
+    URL:
+    <input
+      type="text"
+      value={url}
+      onChange={handleUrlChange}
+    />
+    <br />
+    <button type="submit">Create Blog</button>
+  </form>
   )
 }
 
