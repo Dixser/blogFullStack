@@ -4,8 +4,6 @@ import blogService from '../services/blogs'
 import Blog from './Blog'
 import Togglable from './Toggable'
 
-
-
 const BlogSection = ({
   blogs,
   user,
@@ -13,13 +11,6 @@ const BlogSection = ({
   errorMessage,
   handleErrorMessageChange,
 }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-  const handleTitleChange = ({ target }) => setTitle(target.value)
-  const handleAuthorChange = ({ target }) => setAuthor(target.value)
-  const handleUrlChange = ({ target }) => setUrl(target.value)
-
   const blogFormRef = useRef()
 
   const BlogForm = (errorMessage) => {
@@ -27,7 +18,7 @@ const BlogSection = ({
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
     const handleSubmit = async (event) => {
-      event.preventDefault()  
+      event.preventDefault()
       try {
         const newBlog = await blogService.create({
           title,
@@ -40,40 +31,28 @@ const BlogSection = ({
         blogs.push(newBlog)
         handleErrorMessageChange('Blog added!')
       } catch (error) {
-        console.log(error.message);
-        
+        console.log(error.message)
+
         handleErrorMessageChange(error.response.data.error)
       }
     }
     const handleTitleChange = ({ target }) => setTitle(target.value)
     const handleAuthorChange = ({ target }) => setAuthor(target.value)
     const handleUrlChange = ({ target }) => setUrl(target.value)
-  
+
     return (
       <form onSubmit={handleSubmit}>
-      Title:
-      <input
-        type="text"
-        value={title}
-        onChange={handleTitleChange}
-      />
-      <br />
-      Author:
-      <input
-        type="text"
-        value={author}
-        onChange={handleAuthorChange}
-      />
-      <br />
-      URL:
-      <input
-        type="text"
-        value={url}
-        onChange={handleUrlChange}
-      />
-      <br />
-      <button type="submit">Create Blog</button>
-    </form>
+        Title:
+        <input type="text" value={title} onChange={handleTitleChange} />
+        <br />
+        Author:
+        <input type="text" value={author} onChange={handleAuthorChange} />
+        <br />
+        URL:
+        <input type="text" value={url} onChange={handleUrlChange} />
+        <br />
+        <button type="submit">Create Blog</button>
+      </form>
     )
   }
 
@@ -88,23 +67,7 @@ const BlogSection = ({
           </button>
         </p>
         <Togglable buttonLabel={'New Blog'} ref={blogFormRef}>
-{/*                     <form onSubmit={handleSubmit}>
-            Title:
-            <input type="text" value={title} onChange={handleTitleChange} />
-            <br />
-            Author:
-            <input type="text" value={author} onChange={handleAuthorChange} />
-            <br />
-            URL:
-            <input type="text" value={url} onChange={handleUrlChange} />
-            <br />
-            <button type="submit">Create Blog</button>
-          </form> */}
-          <BlogForm
-/*             blogs={blogs}
-            handleErrorMessageChange={handleErrorMessageChange}
-            errorMessage={errorMessage} */
-          />
+          <BlogForm />
         </Togglable>
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
