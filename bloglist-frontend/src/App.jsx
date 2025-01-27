@@ -11,8 +11,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-
-
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -60,6 +58,11 @@ const App = () => {
     }, 5000)
   }
 
+  const removeBlog = async (blog) => {
+    const filteredBlogs = blogs.filter((item) => {return item.id !== blog.id})
+    setBlogs(filteredBlogs)
+    handleErrorMessageChange("The blog has been removed")
+  }
 
   return (
     <>
@@ -79,7 +82,8 @@ const App = () => {
           handleLogout={handleLogout}
           errorMessage={errorMessage}
           handleErrorMessageChange={handleErrorMessageChange}
-/*           title={title}
+          removeBlog={removeBlog}
+          /*           title={title}
           author={author}
           url={url}
           handleTitleChange={handleTitleChange}

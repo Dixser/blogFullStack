@@ -10,6 +10,7 @@ const BlogSection = ({
   handleLogout,
   errorMessage,
   handleErrorMessageChange,
+  removeBlog
 }) => {
   const blogFormRef = useRef()
 
@@ -56,6 +57,8 @@ const BlogSection = ({
     )
   }
 
+  blogs.sort((a, b) => b.likes - a.likes)
+
   return (
     <>
       <div>
@@ -70,7 +73,7 @@ const BlogSection = ({
           <BlogForm />
         </Togglable>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} removeBlog={removeBlog}/>
         ))}
       </div>
     </>
