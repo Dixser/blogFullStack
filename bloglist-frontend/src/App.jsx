@@ -59,9 +59,11 @@ const App = () => {
   }
 
   const removeBlog = async (blog) => {
-    const filteredBlogs = blogs.filter((item) => {return item.id !== blog.id})
+    const filteredBlogs = blogs.filter((item) => {
+      return item.id !== blog.id
+    })
     setBlogs(filteredBlogs)
-    handleErrorMessageChange("The blog has been removed")
+    handleErrorMessageChange('The blog has been removed')
   }
 
   return (
@@ -80,15 +82,8 @@ const App = () => {
           blogs={blogs}
           user={user}
           handleLogout={handleLogout}
-          errorMessage={errorMessage}
           handleErrorMessageChange={handleErrorMessageChange}
           removeBlog={removeBlog}
-          /*           title={title}
-          author={author}
-          url={url}
-          handleTitleChange={handleTitleChange}
-          handleAuthorChange={handleAuthorChange}
-          handleUrlChange={handleUrlChange} */
         />
       )}
     </>

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
-
+import PropTypes from 'prop-types'
 const Blog = ({ blog, removeBlog }) => {
   const blogStyle = {
     paddingTop: 10,
@@ -20,7 +20,7 @@ const Blog = ({ blog, removeBlog }) => {
     await blogService.update(updatedBlog.id, updatedBlog)
   }
   const handleDelete = async (event) => {
-    if (window.confirm) {
+    if (window.confirm('Are you sure you want to delete "'+blog.title+'"?')) {
       await blogService.remove(blog.id)
       removeBlog(blog)
     }
@@ -54,5 +54,8 @@ const Blog = ({ blog, removeBlog }) => {
     </div>
   )
 }
-
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  removeBlog: PropTypes.func.isRequired,
+}
 export default Blog

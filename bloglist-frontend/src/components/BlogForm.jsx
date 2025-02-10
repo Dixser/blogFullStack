@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
-const BlogForm = (blogs, handleErrorMessageChange, errorMessage) => {
+import PropTypes from 'prop-types'
+
+const BlogForm = (blogs, handleErrorMessageChange) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -29,30 +31,22 @@ const BlogForm = (blogs, handleErrorMessageChange, errorMessage) => {
 
   return (
     <form onSubmit={handleSubmit}>
-    Title:
-    <input
-      type="text"
-      value={title}
-      onChange={handleTitleChange}
-    />
-    <br />
-    Author:
-    <input
-      type="text"
-      value={author}
-      onChange={handleAuthorChange}
-    />
-    <br />
-    URL:
-    <input
-      type="text"
-      value={url}
-      onChange={handleUrlChange}
-    />
-    <br />
-    <button type="submit">Create Blog</button>
-  </form>
+      Title:
+      <input type="text" value={title} onChange={handleTitleChange} />
+      <br />
+      Author:
+      <input type="text" value={author} onChange={handleAuthorChange} />
+      <br />
+      URL:
+      <input type="text" value={url} onChange={handleUrlChange} />
+      <br />
+      <button type="submit">Create Blog</button>
+    </form>
   )
 }
 
+BlogForm.propTypes = {
+  blogs: PropTypes.array.isRequired,
+  handleErrorMessageChange: PropTypes.func.isRequired,
+}
 export default BlogForm
