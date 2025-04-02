@@ -20,7 +20,9 @@ const Blog = ({ blog, removeBlog }) => {
     await blogService.update(updatedBlog.id, updatedBlog)
   }
   const handleDelete = async (event) => {
-    if (window.confirm('Are you sure you want to delete "'+blog.title+'"?')) {
+    if (
+      window.confirm('Are you sure you want to delete "' + blog.title + '"?')
+    ) {
       await blogService.remove(blog.id)
       removeBlog(blog)
     }
@@ -29,14 +31,16 @@ const Blog = ({ blog, removeBlog }) => {
   const display = { display: visible ? '' : 'none' }
   return (
     <div style={blogStyle}>
-      <h3>{blog.title}</h3>
-      <em>
-        by {blog.author}{' '}
-        <button type="button" onClick={changeVisibility}>
-          {visible ? 'Hide' : 'View more'}
-        </button>
-      </em>
-      <div style={display}>
+      <div className="mainContent">
+        <h3>{blog.title}</h3>
+        <em>
+          by {blog.author}{' '}
+          <button type="button" onClick={changeVisibility}>
+            {visible ? 'Hide' : 'View more'}
+          </button>
+        </em>
+      </div>
+      <div style={display} className="hiddenContent">
         <p>{blog.url}</p>
         <p>
           likes {likes}{' '}
