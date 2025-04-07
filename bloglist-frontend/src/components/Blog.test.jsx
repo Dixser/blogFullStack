@@ -40,7 +40,7 @@ test('renders content', () => {
   expect(hiddenContent).toHaveTextContent('/sample-blog')
   expect(hiddenContent).toHaveTextContent('likes')
 })
-test('renders content', () => {
+test('click on button changes displayed content', async () => {
   const blog = {
     title: 'Component testing is done with react-testing-library',
     author: 'Dani Ortiz',
@@ -54,27 +54,13 @@ test('renders content', () => {
   const mockHandler = vi.fn()
 
   const { container } = render(<Blog blog={blog} />)
+
+  const user = userEvent.setup()
+  const button = screen.getByText('View more')
+  await user.click(button)
   screen.debug()
-  const title = screen.getByText(
-    'Component testing is done with react-testing-library'
-  )
-  expect(title).toBeDefined()
 
-  const author = screen.getByText('by Dani Ortiz')
-  expect(author).toBeDefined()
-
-  const url = screen.getByText('/sample-blog')
-  expect(url).toBeDefined()
-
-  const likes = screen.getByText('likes 5')
-  expect(likes).toBeDefined()
-
-  const mainContent = container.querySelector('.mainContent')
-  expect(mainContent).toHaveTextContent(
-    'Component testing is done with react-testing-library'
-  )
-  expect(mainContent).toHaveTextContent('Dani Ortiz')
-
+  screen.getByText('Hide')
   const hiddenContent = container.querySelector('.hiddenContent')
   expect(hiddenContent).toHaveTextContent('/sample-blog')
   expect(hiddenContent).toHaveTextContent('likes')
