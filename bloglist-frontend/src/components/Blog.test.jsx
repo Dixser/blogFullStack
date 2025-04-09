@@ -54,14 +54,13 @@ test('click on button changes displayed content', async () => {
   const mockHandler = vi.fn()
 
   const { container } = render(<Blog blog={blog} />)
+  const hiddenContent = container.querySelector('.hiddenContent')
+  expect(hiddenContent).toHaveStyle('display: none')
 
   const user = userEvent.setup()
   const button = screen.getByText('View more')
   await user.click(button)
-  screen.debug()
 
   screen.getByText('Hide')
-  const hiddenContent = container.querySelector('.hiddenContent')
-  expect(hiddenContent).toHaveTextContent('/sample-blog')
-  expect(hiddenContent).toHaveTextContent('likes')
+  expect(hiddenContent).not.toHaveStyle('display: none')
 })
