@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
-const Blog = ({ blog, removeBlog }) => {
+const Blog = ({ blog, removeBlog, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -31,28 +31,30 @@ const Blog = ({ blog, removeBlog }) => {
   const display = { display: visible ? '' : 'none' }
   return (
     <div style={blogStyle}>
-      <div className="mainContent">
+      <div className='mainContent'>
         <h3>{blog.title}</h3>
         <em>
           by {blog.author}{' '}
-          <button type="button" onClick={changeVisibility}>
+          <button type='button' onClick={changeVisibility}>
             {visible ? 'Hide' : 'View more'}
           </button>
         </em>
       </div>
-      <div style={display} className="hiddenContent">
+      <div style={display} className='hiddenContent'>
         <p>{blog.url}</p>
         <p>
-          likes {likes}{' '}
-          <button type="button" onClick={handleClick}>
+          likes <em data-testid='likes' className='likes'>{likes}</em>{' '}
+          <button type='button' onClick={handleClick}>
             like
           </button>
         </p>
-        <p>{blog.user.username}</p>
+        {blog.user.username && <p>{blog.user.username}</p>}
         <p>
-          <button type="button" onClick={handleDelete}>
-            Delete blog
-          </button>
+          {blog.user.username === user.username && (
+            <button type='button' onClick={handleDelete}>
+              Delete blog
+            </button>
+          )}
         </p>
       </div>
     </div>

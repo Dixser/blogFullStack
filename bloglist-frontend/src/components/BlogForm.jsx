@@ -1,14 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const BlogForm = (blogs, handleErrorMessageChange) => {
+const BlogForm = ({blogs, handleErrorMessageChange}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const handleSubmit = async (event) => {
     event.preventDefault()
-
     try {
       const newBlog = await blogService.create({
         title,
@@ -21,9 +20,9 @@ const BlogForm = (blogs, handleErrorMessageChange) => {
       blogs.push(newBlog)
       handleErrorMessageChange('Blog added!')
     } catch (error) {
-      if (error.response !== undefined) {
-        handleErrorMessageChange(error.response.data.error)
-      }
+      console.log(error.message)
+
+      handleErrorMessageChange(error.response.data.error)
     }
   }
   const handleTitleChange = ({ target }) => setTitle(target.value)
@@ -34,29 +33,32 @@ const BlogForm = (blogs, handleErrorMessageChange) => {
     <form onSubmit={handleSubmit}>
       Title:
       <input
-        type="text"
-        placeholder="your title"
+        type='text'
         value={title}
+        id='title'
+        data-testid='title'
         onChange={handleTitleChange}
       />
       <br />
       Author:
       <input
-        type="text"
-        placeholder="your name"
+        type='text'
         value={author}
+        id='author'
+        data-testid='author'
         onChange={handleAuthorChange}
       />
       <br />
       URL:
       <input
-        type="text"
-        placeholder="your url"
+        type='text'
         value={url}
+        id='url'
+        data-testid='url'
         onChange={handleUrlChange}
       />
       <br />
-      <button type="submit">Create Blog</button>
+      <button type='submit'>Create Blog</button>
     </form>
   )
 }

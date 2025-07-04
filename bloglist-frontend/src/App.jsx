@@ -1,8 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import BlogSection from './components/BlogSection'
 import loginService from './services/login'
+import ErrorMessage from './components/ErrorMessage'
+import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -65,10 +68,11 @@ const App = () => {
     setBlogs(filteredBlogs)
     handleErrorMessageChange('The blog has been removed')
   }
-
+  const blogFormRef = useRef()
   return (
     <>
-      <h1>{errorMessage}</h1>
+      <ErrorMessage message={errorMessage} />
+      <h2>blogs</h2>
       {user === null ? (
         <LoginForm
           handleLogin={handleLogin}
@@ -78,13 +82,21 @@ const App = () => {
           password={password}
         />
       ) : (
-        <BlogSection
-          blogs={blogs}
-          user={user}
-          handleLogout={handleLogout}
-          handleErrorMessageChange={handleErrorMessageChange}
-          removeBlog={removeBlog}
-        />
+        <>
+          <Togglable buttonLabel={'New Blog'} ref={blogFormRef}>
+            <BlogForm
+              blogs={blogs}
+              handleErrorMessageChange={handleErrorMessageChange}
+            />
+          </Togglable>
+          <BlogSection
+            blogs={blogs}
+            user={user}
+            handleLogout={handleLogout}
+            handleErrorMessageChange={handleErrorMessageChange}
+            removeBlog={removeBlog}
+          />
+        </>
       )}
     </>
   )
