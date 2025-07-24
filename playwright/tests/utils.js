@@ -30,17 +30,11 @@ const giveLikes = async (page, blogIndex, times) => {
   await page.getByRole('button', { name: 'Hide' }).click()
 }
 const getLikes = async (page) => {
-  await page.pause()
-  
   const likeCount = []
-
- const likes = await page.getByTestId('likes').all()
- for (const like of likes) {
-   likeCount.push(await like.innerText())
-   console.log(likeCount)
-   await page.pause()
- }
-
+  const likes = await page.getByTestId('likes').all()
+  for (const like of likes) {
+    likeCount.push(await like.innerText())
+  }
   return likeCount
 }
 export { loginWith, createBlog, logout, screenshot, giveLikes, getLikes }

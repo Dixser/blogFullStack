@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
+import { update, remove } from '../services/blogs'
 import PropTypes from 'prop-types'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 const Blog = ({ blog, removeBlog, user }) => {
   const blogStyle = {
     paddingTop: 10,
@@ -10,21 +11,40 @@ const Blog = ({ blog, removeBlog, user }) => {
     marginBottom: 5,
   }
   const [visible, setVisible] = useState(false)
-  const [likes, setLikes] = useState(blog.likes)
+  const queryClient = useQueryClient()
   const changeVisibility = () => {
     setVisible(!visible)
   }
-  const handleClick = async (event) => {
-    setLikes(++blog.likes)
-    const updatedBlog = blog
-    await blogService.update(updatedBlog.id, updatedBlog)
+
+  const updateBlogMutation = useMutation({
+    mutationFn: update,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  })
+  const removeBlogMutation = useMutation({
+    mutationFn: remove,
+    onSuccess: () => {
+      removeBlog(blog)
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+    },
+    onError: (error) => {
+      console.log(error)
+    },
+  })
+
+  const handleClick = async () => {
+    const newBlog = { ...blog, likes: blog.likes + 1 }
+    updateBlogMutation.mutate(newBlog)
   }
-  const handleDelete = async (event) => {
+  const handleDelete = () => {
     if (
       window.confirm('Are you sure you want to delete "' + blog.title + '"?')
     ) {
-      await blogService.remove(blog.id)
-      removeBlog(blog)
+      removeBlogMutation.mutate(blog.id)
     }
   }
 
@@ -43,7 +63,10 @@ const Blog = ({ blog, removeBlog, user }) => {
       <div style={display} className='hiddenContent'>
         <p>{blog.url}</p>
         <p>
-          likes <em data-testid='likes' className='likes'>{likes}</em>{' '}
+          likes{' '}
+          <em data-testid='likes' className='likes'>
+            {blog.likes}
+          </em>{' '}
           <button type='button' onClick={handleClick}>
             like
           </button>

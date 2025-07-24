@@ -1,24 +1,34 @@
 import { useEffect, useState } from 'react'
-import blogService from '../services/blogs'
+import { create } from '../services/blogs'
 import PropTypes from 'prop-types'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+const BlogForm = ({ handleErrorMessageChange }) => {
+  const queryClient = useQueryClient()
+  const newNoteMutation = useMutation({
+    mutationFn: create,
+    onSuccess: () => {
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      handleErrorMessageChange('Blog added!')
+    },
+    onError: (error) => {
+      handleErrorMessageChange(error.response.data.error)
+    },
+  })
 
-const BlogForm = ({blogs, handleErrorMessageChange}) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      const newBlog = await blogService.create({
+      newNoteMutation.mutate({
         title,
         author,
         url,
       })
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      blogs.push(newBlog)
-      handleErrorMessageChange('Blog added!')
     } catch (error) {
       console.log(error.message)
 

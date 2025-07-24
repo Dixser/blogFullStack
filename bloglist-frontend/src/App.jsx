@@ -6,14 +6,13 @@ import loginService from './services/login'
 import ErrorMessage from './components/ErrorMessage'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-
+import { useQuery } from '@tanstack/react-query'
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
+  const blogFormRef = useRef()
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
@@ -23,10 +22,12 @@ const App = () => {
     }
   }, [])
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
-
+  const result = useQuery({
+    queryKey: ['blogs'],
+    queryFn: () => blogService.getAll(),
+  })
+  if (result.isLoading) return <div>Loading...</div>
+  const blogs = result.data
   const handleLogin = async (event) => {
     event.preventDefault()
 
@@ -65,10 +66,9 @@ const App = () => {
     const filteredBlogs = blogs.filter((item) => {
       return item.id !== blog.id
     })
-    setBlogs(filteredBlogs)
     handleErrorMessageChange('The blog has been removed')
   }
-  const blogFormRef = useRef()
+
   return (
     <>
       <ErrorMessage message={errorMessage} />

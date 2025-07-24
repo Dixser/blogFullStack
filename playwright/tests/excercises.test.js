@@ -138,7 +138,7 @@ describe('Only User who created the blog can see Delete Button', () => {
     await expect(page.getByRole('button', { name: 'Delete blog' })).toBeHidden()
   })
 })
-describe.only('Likes are sorted by number', () => {
+describe('Likes are sorted by number', () => {
   beforeEach(async ({ page, request }) => {
     await request.post('http:localhost:3003/api/testing/reset')
 
@@ -169,7 +169,7 @@ describe.only('Likes are sorted by number', () => {
       url: 'http://test3.com',
     })
   })
-  test.only('likes are sorted by number', async ({ page }) => {
+  test('likes are sorted by number', async ({ page }) => {
     await giveLikes(page, 0, 4)
     await giveLikes(page, 1, 7)
     await giveLikes(page, 2, 1)
