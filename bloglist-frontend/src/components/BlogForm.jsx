@@ -1,20 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { create } from '../services/blogs'
-import PropTypes from 'prop-types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-const BlogForm = ({ handleErrorMessageChange }) => {
+import { useNotification } from '../contexts/NotificationContext'
+const BlogForm = () => {
   const queryClient = useQueryClient()
+  const [notification, setNotification] = useNotification()
   const newNoteMutation = useMutation({
     mutationFn: create,
     onSuccess: () => {
+      console.log('Blog added!')
       setTitle('')
       setAuthor('')
       setUrl('')
+      setNotification('Blog added!', 5)
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
-      handleErrorMessageChange('Blog added!')
     },
     onError: (error) => {
-      handleErrorMessageChange(error.response.data.error)
+      setNotification(error.response.data.error, 5)
     },
   })
 
@@ -31,8 +33,7 @@ const BlogForm = ({ handleErrorMessageChange }) => {
       })
     } catch (error) {
       console.log(error.message)
-
-      handleErrorMessageChange(error.response.data.error)
+      setNotification(error.response.data.error, 5)
     }
   }
   const handleTitleChange = ({ target }) => setTitle(target.value)
@@ -73,8 +74,4 @@ const BlogForm = ({ handleErrorMessageChange }) => {
   )
 }
 
-BlogForm.propTypes = {
-  blogs: PropTypes.array.isRequired,
-  handleErrorMessageChange: PropTypes.func.isRequired,
-}
 export default BlogForm

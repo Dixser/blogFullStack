@@ -1,19 +1,15 @@
-//import BlogForm from './BlogForm'
-import { useState, useRef } from 'react'
-import blogService from '../services/blogs'
 import Blog from './Blog'
-import Togglable from './Togglable'
 import PropTypes from 'prop-types'
-
+import { useUser } from '../contexts/UserContext'
 const BlogSection = ({
-  blogs,
-  user,
-  handleLogout,
-  handleErrorMessageChange,
-  removeBlog,
+  blogs
 }) => {
   blogs.sort((a, b) => b.likes - a.likes)
-
+  const { user, logout } = useUser()
+  const handleLogout = () => {
+    logout()
+    window.localStorage.removeItem('loggedBlogappUser')
+  }
   return (
     <>
       <div>
@@ -24,7 +20,7 @@ const BlogSection = ({
           </button>
         </p>
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} removeBlog={removeBlog} user={user} />
+          <Blog key={blog.id} blog={blog}/>
         ))}
       </div>
     </>
@@ -32,9 +28,5 @@ const BlogSection = ({
 }
 BlogSection.propTypes = {
   blogs: PropTypes.array.isRequired,
-  user: PropTypes.object.isRequired,
-  handleLogout: PropTypes.func.isRequired,
-  handleErrorMessageChange: PropTypes.func.isRequired,
-  removeBlog: PropTypes.func.isRequired,
 }
 export default BlogSection

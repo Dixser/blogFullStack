@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types'
-const LoginForm = ({
-  handleLogin,
-  handleUsernameChange,
-  handlePasswordChange,
-  username,
-  password,
-}) => {
+import { useUser } from '../contexts/UserContext'
+import { useState } from 'react'
+const LoginForm = () => {
+  const { login } = useUser()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const handleLogin = (event) => {
+    event.preventDefault()
+    login(username, password)
+  }
   return (
     <>
       <form onSubmit={handleLogin}>
@@ -17,7 +19,7 @@ const LoginForm = ({
             name="Username"
             autoComplete="username"
             data-testid='username'
-            onChange={handleUsernameChange}
+            onChange={(e) => setUsername(e.target.value)}
           />
         </div>
         <div>
@@ -28,20 +30,13 @@ const LoginForm = ({
             name="Password"
             data-testid='password'
             autoComplete="current-password"
-            onChange={handlePasswordChange}
+            onChange={(e) => setPassword(e.target.value)}
           />
         </div>
         <button type="submit">login</button>
       </form>
     </>
   )
-}
-LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-  handleUsernameChange: PropTypes.func.isRequired,
-  handlePasswordChange: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired,
 }
 
 export default LoginForm

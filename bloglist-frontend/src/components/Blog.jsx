@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { update, remove } from '../services/blogs'
 import PropTypes from 'prop-types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-const Blog = ({ blog, removeBlog, user }) => {
+import { useUser } from '../contexts/UserContext'
+import { useNotification } from '../contexts/NotificationContext'
+const Blog = ({ blog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -12,6 +14,7 @@ const Blog = ({ blog, removeBlog, user }) => {
   }
   const [visible, setVisible] = useState(false)
   const queryClient = useQueryClient()
+  const [notification, setNotification] = useNotification()
   const changeVisibility = () => {
     setVisible(!visible)
   }
@@ -20,6 +23,7 @@ const Blog = ({ blog, removeBlog, user }) => {
     mutationFn: update,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      setNotification('Blog voted!', 5)
     },
     onError: (error) => {
       console.log(error)
@@ -28,8 +32,8 @@ const Blog = ({ blog, removeBlog, user }) => {
   const removeBlogMutation = useMutation({
     mutationFn: remove,
     onSuccess: () => {
-      removeBlog(blog)
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      setNotification('Blog deleted!', 5)
     },
     onError: (error) => {
       console.log(error)
@@ -47,7 +51,7 @@ const Blog = ({ blog, removeBlog, user }) => {
       removeBlogMutation.mutate(blog.id)
     }
   }
-
+  const { user } = useUser()
   const display = { display: visible ? '' : 'none' }
   return (
     <div style={blogStyle}>
@@ -85,6 +89,5 @@ const Blog = ({ blog, removeBlog, user }) => {
 }
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  removeBlog: PropTypes.func.isRequired,
 }
 export default Blog
