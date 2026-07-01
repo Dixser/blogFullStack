@@ -60,14 +60,13 @@ test('a valid blog can be added', async () => {
     likes: 9,
   }
 
- await api
+  await api
     .post('/api/blogs')
     .send(newBlog)
     .set('Authorization', `Bearer ${result.body.token}`)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  
   const response = await api.get('/api/blogs')
 
   const titles = response.body.map((r) => r.title)

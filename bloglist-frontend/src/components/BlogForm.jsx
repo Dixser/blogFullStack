@@ -41,36 +41,32 @@ const BlogForm = () => {
   const handleUrlChange = ({ target }) => setUrl(target.value)
 
   return (
-    <form onSubmit={handleSubmit}>
-      Title:
-      <input
-        type='text'
-        value={title}
-        id='title'
-        data-testid='title'
-        onChange={handleTitleChange}
-      />
-      <br />
-      Author:
-      <input
-        type='text'
-        value={author}
-        id='author'
-        data-testid='author'
-        onChange={handleAuthorChange}
-      />
-      <br />
-      URL:
-      <input
-        type='text'
-        value={url}
-        id='url'
-        data-testid='url'
-        onChange={handleUrlChange}
-      />
-      <br />
-      <button type='submit'>Create Blog</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        Title:
+        <input
+          type="text"
+          value={title}
+          id="title"
+          data-testid="title"
+          onChange={handleTitleChange}
+        />
+        <br />
+        Author:
+        <input
+          type="text"
+          value={author}
+          id="author"
+          data-testid="author"
+          onChange={handleAuthorChange}
+        />
+        <br />
+        URL:
+        <input type="text" value={url} id="url" data-testid="url" onChange={handleUrlChange} />
+        <br />
+        <button type="submit">Create Blog</button>
+      </form>
+    </div>
   )
 }
 

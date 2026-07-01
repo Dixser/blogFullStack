@@ -16,9 +16,7 @@ test('renders content', () => {
 
   const { container } = render(<Blog blog={blog} />)
 
-  const title = screen.getByText(
-    'Component testing is done with react-testing-library'
-  )
+  const title = screen.getByText('Component testing is done with react-testing-library')
   expect(title).toBeDefined()
 
   const author = screen.getByText('by Dani Ortiz')
@@ -31,9 +29,7 @@ test('renders content', () => {
   expect(likes).toBeDefined()
 
   const mainContent = container.querySelector('.mainContent')
-  expect(mainContent).toHaveTextContent(
-    'Component testing is done with react-testing-library'
-  )
+  expect(mainContent).toHaveTextContent('Component testing is done with react-testing-library')
   expect(mainContent).toHaveTextContent('Dani Ortiz')
 
   const hiddenContent = container.querySelector('.hiddenContent')

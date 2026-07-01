@@ -8,7 +8,10 @@ blogRouter.get('/', async (request, response) => {
 })
 
 blogRouter.get('/:id', async (request, response) => {
-  const blog = await Blog.findById(request.params.id)
+  const blog = await Blog.findById(request.params.id).populate('user', {
+    username: 1,
+    name: 1,
+  })
   response.json(blog)
 })
 
@@ -39,8 +42,7 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
   await request.user.save()
 })
 
-blogRouter.delete('/:id',middleware.userExtractor, async (request, response) => {
- 
+blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
   const blog = await Blog.findById(request.params.id)
   if (blog.user.toString() === request.user.id) {
     await Blog.findByIdAndDelete(request.params.id)
@@ -48,6 +50,20 @@ blogRouter.delete('/:id',middleware.userExtractor, async (request, response) => 
   } else {
     response.status(401).json({ error: 'token invalid' })
   }
+})
+
+blogRouter.post('/:id/comments', async (request, response) => {
+  const { comment } = request.body
+  if (!comment || comment.trim() === '') {
+    return response.status(400).json({ error: 'Comment is required' })
+  }
+  const blog = await Blog.findById(request.params.id)
+  if (!blog) {
+    return response.status(404).json({ error: 'Blog not found' })
+  }
+  blog.comments = blog.comments.concat(comment.trim())
+  const savedBlog = await blog.save()
+  response.status(201).json(savedBlog)
 })
 
 blogRouter.put('/:id', async (request, response, next) => {

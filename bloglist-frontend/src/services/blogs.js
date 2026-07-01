@@ -1,6 +1,11 @@
 import axios from 'axios'
 const baseUrl = '/api/blogs'
 
+export const getById = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`)
+  return response.data
+}
+
 export const getAll = () => {
   const request = axios.get(baseUrl)
   return request.then((response) => response.data)
@@ -21,6 +26,11 @@ export const create = async (newObject) => {
   return response.data
 }
 
+export const createComment = async (id, comment) => {
+  const response = await axios.post(`${baseUrl}/${id}/comments`, { comment })
+  return response.data
+}
+
 export const update = async (newObject) => {
   const request = axios.put(`${baseUrl}/${newObject.id}`, newObject)
   return request.then((response) => response.data)
@@ -33,4 +43,4 @@ export const remove = (id) => {
   return axios.delete(`${baseUrl}/${id}`, config)
 }
 
-export default { getAll, create, update, remove, setToken }
+export default { getAll, getById, create, createComment, update, remove, setToken }

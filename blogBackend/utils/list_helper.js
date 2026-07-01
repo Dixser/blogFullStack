@@ -21,17 +21,14 @@ const favoriteBlog = (blogs) => {
           }
         : maxVal
     },
-    { likes: 0 }
+    { likes: 0 },
   )
 }
 
 const mostBlogs = (blogs) => {
-  const blogsByAuthor = lodash.map(
-    lodash.countBy(blogs, 'author'),
-    (value, key) => {
-      return { author: key, blogs: value }
-    }
-  )
+  const blogsByAuthor = lodash.map(lodash.countBy(blogs, 'author'), (value, key) => {
+    return { author: key, blogs: value }
+  })
   return lodash.maxBy(blogsByAuthor, 'blogs')
 }
 
@@ -50,7 +47,7 @@ const mostLikes = (blogs) => {
         (sum, data) => {
           return sum + data.likes
         },
-        0
+        0,
       ),
     }
   })

@@ -32,10 +32,7 @@ test('<BlogForm /> double summit calls twice the controller', async () => {
   const authorInput = screen.getByPlaceholderText('your name')
   const urlInput = screen.getByPlaceholderText('your url')
 
-  await userEvent.type(
-    titleInput,
-    'Component testing is done with react-testing-library'
-  )
+  await userEvent.type(titleInput, 'Component testing is done with react-testing-library')
   await userEvent.type(authorInput, 'Dani Ortiz')
   await userEvent.type(urlInput, '/sample-blog')
 
@@ -56,10 +53,7 @@ test('The object contains the valid data', async () => {
   const authorInput = screen.getByPlaceholderText('your name')
   const urlInput = screen.getByPlaceholderText('your url')
 
-  await userEvent.type(
-    titleInput,
-    'Component testing is done with react-testing-library'
-  )
+  await userEvent.type(titleInput, 'Component testing is done with react-testing-library')
   await userEvent.type(authorInput, 'Dani Ortiz')
   await userEvent.type(urlInput, '/sample-blog')
 
@@ -67,8 +61,9 @@ test('The object contains the valid data', async () => {
   await user.click(submit)
 
   expect(createBlog.mock.calls).toHaveLength(1)
-  expect(createBlog.mock.calls[0][0].title).toBe('Component testing is done with react-testing-library')
+  expect(createBlog.mock.calls[0][0].title).toBe(
+    'Component testing is done with react-testing-library',
+  )
   expect(createBlog.mock.calls[0][0].author).toBe('Dani Ortiz')
   expect(createBlog.mock.calls[0][0].url).toBe('/sample-blog')
 })
-

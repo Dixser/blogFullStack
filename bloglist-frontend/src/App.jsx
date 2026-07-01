@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { UserProvider, useUser } from './contexts/UserContext'
 import { NotificationProvider } from './contexts/NotificationContext'
@@ -7,51 +7,57 @@ import LoginForm from './components/LoginForm'
 import BlogSection from './components/BlogSection'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import UserList from './components/UserList'
+import UserProfile from './components/UserProfile'
+import BlogDetail from './components/BlogDetail'
+import Navigation from './components/Navigation'
 import Notification from './components/Notification'
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
 const AppContent = () => {
-  const { user, logout } = useUser()
+  const { user } = useUser()
   const blogFormRef = useRef()
-
+  const navigate = useNavigate()
   const result = useQuery({
     queryKey: ['blogs'],
     queryFn: () => blogService.getAll(),
   })
+  useEffect(() => {
+    if (!user) {
+      navigate('/login')
+    }
+  }, [user, navigate])
 
   if (result.isLoading) return <div>Loading...</div>
   const blogs = result.data
 
-  if (!user) {
-    return (
-      <div>
-        <h2>Log in to application</h2>
-        <Notification />
-        <LoginForm />
-      </div>
-    )
-  }
-
   return (
     <div>
       <h2>blogs</h2>
-      <Notification />
-      <Togglable buttonLabel='New Blog' ref={blogFormRef}>
+      <Togglable buttonLabel="New Blog" ref={blogFormRef}>
         <BlogForm />
       </Togglable>
-      <BlogSection blogs={blogs} user={user} />
-      <p>
-        {user.name} logged in <button onClick={logout}>logout</button>
-      </p>
+      <BlogSection blogs={blogs} />
     </div>
   )
 }
 
 const App = () => {
   return (
-    <NotificationProvider>
-      <UserProvider>
-        <AppContent />
-      </UserProvider>
-    </NotificationProvider>
+    <Router>
+      <NotificationProvider>
+        <UserProvider>
+          <Navigation />
+          <Notification />
+          <Routes>
+            <Route path="/" element={<AppContent />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/users" element={<UserList />} />
+            <Route path="/users/:id" element={<UserProfile />} />
+            <Route path="/blogs/:id" element={<BlogDetail />} />
+          </Routes>
+        </UserProvider>
+      </NotificationProvider>
+    </Router>
   )
 }
 

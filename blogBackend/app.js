@@ -11,6 +11,10 @@ const loginRouter = require('./controllers/login')
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
 
+const dns = require('dns')
+
+dns.setServers(['1.1.1.1', '8.8.8.8'])
+
 mongoose.connect(mongoUrl)
 
 app.use(cors())
@@ -38,9 +42,7 @@ const errorHandler = (error, request, response, next) => {
     error.name === 'MongoServerError' &&
     error.message.includes('E11000 duplicate key error')
   ) {
-    return response
-      .status(400)
-      .json({ error: 'expected `username` to be unique' })
+    return response.status(400).json({ error: 'expected `username` to be unique' })
   } else if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({ error: 'token invalid' })
   } else if (error.name === 'TokenExpiredError') {
