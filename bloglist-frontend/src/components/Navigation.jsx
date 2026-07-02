@@ -12,21 +12,27 @@ const Navigation = () => {
   }
 
   return (
-    <nav>
-      <Link to="/">blogs</Link> <Link to="/users">users</Link>
+    <nav className='navBar'>
+      <div className='navLinks'>
+        <Link to="/">blogs</Link> <Link to="/users">users</Link>
+      </div>
       {user ? (
-        <span>
-          {' '}
-          <strong>{user.username}</strong> logged in{' '}
-          <button type="button" onClick={handleLogout}>
-            logout
-          </button>
-        </span>
+        <div>
+          <span>
+            {' '}
+            <strong>{user.username}</strong> logged in{' '}
+            <button type="button" onClick={handleLogout}>
+              logout
+            </button>
+          </span>
+        </div>
       ) : (
-        <span>
-          {' '}
-          <Link to="/login">login</Link>
-        </span>
+        <div>
+          <span>
+            {' '}
+            <Link to="/login">login</Link>
+          </span>
+        </div>
       )}
     </nav>
   )

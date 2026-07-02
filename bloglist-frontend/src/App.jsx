@@ -13,6 +13,8 @@ import BlogDetail from './components/BlogDetail'
 import Navigation from './components/Navigation'
 import Notification from './components/Notification'
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom'
+import './styles/app.css'
+
 const AppContent = () => {
   const { user } = useUser()
   const blogFormRef = useRef()
